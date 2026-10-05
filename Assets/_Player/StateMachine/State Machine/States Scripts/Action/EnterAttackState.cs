@@ -6,9 +6,11 @@ public class EnterAttackState : MeleBaseState
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
         if (Time.time - enterTime >= duration)
         {
             SwitchState(factory.GetState(_States.GoundAttack));
+            return;
         }
     }
 

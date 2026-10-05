@@ -5,6 +5,7 @@ public class RootState : State
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
     }
 
     public override void OnEnter()
@@ -40,7 +41,7 @@ public class RootState : State
     }
     public override void OnTriggerStay2D(Collider2D other)
     {
-        base.OnTriggerEnter2D(other);
+        base.OnTriggerStay2D(other);
         DetectGettingHit(other);
     }
 

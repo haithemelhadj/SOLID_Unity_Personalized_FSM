@@ -1,116 +1,15 @@
-using Unity.VisualScripting;
 using UnityEngine;
-//using SM;
 
-public abstract class State : ScriptableObject
+// Animation is a player dependency, not a dependency of the reusable core.
+public abstract class State : StateBase<StateMachine, StateFactory, Context, State>
 {
-
-    protected StateMachine stateMachine;
-    protected StateFactory factory;
-    protected Context currentContext;
-
-    public float duration;
-    public string animationName;
-
-    protected float enterTime { get; set; }
-    protected float updateTime { get; set; }
-    protected float fixedTime { get; set; }
-    protected float lateTime { get; set; }
-    protected float exitTime { get; set; }
-
-
-    public void Initialize(StateMachine stateMachine, StateFactory factory,Context currentContext)
+    public override void OnEnter()
     {
-        this.stateMachine = stateMachine;
-        this.factory = factory;
-        this.currentContext = currentContext;
-    }
-    public virtual void OnEnter()
-    {
-        Debug.Log("Enter State: " + this.ToString());
-        stateMachine.currentStateName = this.ToString();
-        enterTime=Time.time;
-        currentContext.animatorController.PlayAnimation(animationName,0f);
+        base.OnEnter();
+        if (stateMachine.logStateChange) Debug.Log("Enter State: " + this);
+        if (currentContext.animatorController != null)
+            currentContext.animatorController.PlayAnimation(animationName, 0f);
     }
 
-
-    public virtual void OnUpdate()
-    {
-        updateTime += Time.deltaTime;
-    }
-
-    public virtual void OnFixedUpdate()
-    {
-        fixedTime += Time.deltaTime;
-    }
-    public virtual void OnLateUpdate()
-    {
-        lateTime += Time.deltaTime;
-        CheckSwitchState();
-    }
-
-    public virtual void OnExit()
-    {
-        exitTime = Time.time;
-    }
-    public virtual void CheckSwitchState()
-    {
-
-    }
-    protected void SwitchState(State newState)
-    {
-        OnExit();
-        newState.OnEnter();
-        stateMachine.currentState = newState;
-    }
-
-    public virtual void OnTriggerStay2D()
-    {
-
-    }
-
-
-    public virtual void OnTriggerEnter2D(Collider2D other) { /*Debug.Log("te");*/ }
-    public virtual void OnTriggerStay2D(Collider2D other) { /*Debug.Log("te");*/ }
-    public virtual void OnTriggerExit2D(Collider2D other) { /*Debug.Log("tx");*/ }
-
-    public virtual void OnCollisionEnter2D(Collision2D collision) { /*Debug.Log("ce");*/ }
-    public virtual void OnCollisionStay2D(Collision2D collision) { /*Debug.Log("ce");*/ }
-    public virtual void OnCollisionExit2D(Collision2D collision) { /*Debug.Log("cx");*/ }
-
-
-    #region Passthrough Methods
-
-    /// <summary>
-    /// Removes a gameobject, component, or asset.
-    /// </summary>
-    /// <param name="obj">The type of Component to retrieve.</param>
-    protected static void Destroy(UnityEngine.Object obj)
-    {
-        UnityEngine.Object.Destroy(obj);
-    }
-
-    /// <summary>
-    /// Returns the component of type T if the game object has one attached, null if it doesn't.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    protected T GetComponent<T>() where T : Component { return stateMachine.GetComponent<T>(); }
-
-    /// <summary>
-    /// Returns the component of Type <paramref name="type"/> if the game object has one attached, null if it doesn't.
-    /// </summary>
-    /// <param name="type">The type of Component to retrieve.</param>
-    /// <returns></returns>
-    protected Component GetComponent(System.Type type) { return stateMachine.GetComponent(type); }
-
-    /// <summary>
-    /// Returns the component with name <paramref name="type"/> if the game object has one attached, null if it doesn't.
-    /// </summary>
-    /// <param name="type">The type of Component to retrieve.</param>
-    /// <returns></returns>
-    protected Component GetComponent(string type) { return stateMachine.GetComponent(type); }
-
-    
-    #endregion
+    public virtual void OnTriggerStay2D() { }
 }

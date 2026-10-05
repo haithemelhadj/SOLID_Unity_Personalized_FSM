@@ -1,26 +1,8 @@
-using System.Collections.Generic;
-//using SM;
+using UnityEngine;
 
-public class StateFactory
+public class StateFactory : StateFactoryBase<StateMachine, Context, _States, State, StatesList, StatesList.StateEntry>
 {
-    StateMachine stateMachine;
-    Dictionary<_States, State> _states = new Dictionary<_States, State>();
-
-    public StateFactory(StateMachine currentContext, StatesList config)
-    {
-        stateMachine = currentContext;
-        foreach (var entry in config.states)
-        {
-            if (!_states.ContainsKey(entry.state))
-            {
-                _states[entry.state] = entry.stateClass;
-                _states[entry.state].Initialize(stateMachine, this,stateMachine.currentContext);
-            }
-        }
-    }
-
-    public State GetState(_States state)
-    {
-        return _states[state];
-    }
+    public StateFactory(StateMachine machine, StatesList config) : base(machine, config) { }
+    protected override State CreateState(State asset) => Object.Instantiate(asset);
+    protected override void InitializeState(State state) => state.Initialize(stateMachine, this, stateMachine.currentContext);
 }

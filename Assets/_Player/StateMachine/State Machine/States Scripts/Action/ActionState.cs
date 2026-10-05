@@ -8,6 +8,7 @@ public class ActionState : RootState
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
     }
 
     public override void OnEnter()

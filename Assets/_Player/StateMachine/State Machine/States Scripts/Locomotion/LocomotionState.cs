@@ -8,9 +8,11 @@ public class LocomotionState : RootState
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
         if (currentContext.dashInputDown && currentContext.canDashCheck())
         {
             SwitchState(factory.GetState(_States.Dash));
+            return;
         }
     }
 

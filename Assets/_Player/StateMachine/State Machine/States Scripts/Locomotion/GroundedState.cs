@@ -19,21 +19,26 @@ public class GroundedState : LocomotionState
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
         if (currentContext.jumpInputDown || currentContext.willBufferJump)
         {
             SwitchState(factory.GetState(_States.Jump));
+            return;
         }
         if (!currentContext.isGrounded && currentContext.Rb.velocity.y < 0f)
         {
             SwitchState(factory.GetState(_States.Fall));
+            return;
         }
         if (currentContext.attackInputDown)
         {
             SwitchState(factory.GetState(_States.GoundAttack));
+            return;
         }
         if (currentContext.defendInput && !(stateMachine.currentState is DefendState))
         {
             SwitchState(factory.GetState(_States.Parry));
+            return;
         }
     }
 

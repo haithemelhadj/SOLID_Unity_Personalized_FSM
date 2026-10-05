@@ -14,24 +14,29 @@ public class FallState : LocomotionState
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
         if (currentContext.isGrounded)
         {
             if (highFall)
             {
                 SwitchState(factory.GetState(_States.FallRecovery));
+            return;
             }
             else
                 SwitchState(factory.GetState(_States.Grounded));
+            return;
 
         }
         if (currentContext.canCyoteJump && currentContext.jumpInputDown)
         {
             SwitchState(factory.GetState(_States.Jump));
+            return;
         }
 
         if (!currentContext.isGrounded && currentContext.isHuggingWall)
         {
             SwitchState(factory.GetState(_States.WallSlide));
+            return;
         }
     }
 

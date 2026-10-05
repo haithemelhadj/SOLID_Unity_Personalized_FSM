@@ -7,13 +7,16 @@ public class GetHitState : ActionState
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
         if (Time.time - enterTime > duration)
         {
             SwitchState(factory.GetState(_States.Grounded));
+            return;
         }
         if (currentContext.currentHealth <= 0f && Time.time - enterTime > duration)
         {
             SwitchState(factory.GetState(_States.Death));
+            return;
         }
     }
 

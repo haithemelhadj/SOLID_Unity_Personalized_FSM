@@ -7,6 +7,7 @@ public class GroundAttackAnticipationState : ActionState
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
     }
 
     public override void OnCollisionEnter2D(Collision2D collision)

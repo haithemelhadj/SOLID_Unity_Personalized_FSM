@@ -10,9 +10,11 @@ public class ParryState : TransitionState
         if(!currentContext.defendInput)
         {
             SwitchState(factory.GetState(_States.Grounded));
+            return;
 
         }
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
     }
 
     public override void OnEnter()

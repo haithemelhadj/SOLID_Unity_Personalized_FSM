@@ -8,18 +8,22 @@ public class WallSlideState : LocomotionState
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
         if (currentContext.isGrounded)
         {
             SwitchState(factory.GetState(_States.Grounded));
+            return;
         }
         if (currentContext.jumpInputDown || currentContext.willBufferJump)
         {
             currentContext.wallJumpPressTime = Time.time;
             SwitchState(factory.GetState(_States.Jump));
+            return;
         }
         if (!currentContext.isGrounded && !currentContext.isHuggingWall)
         {
             SwitchState(factory.GetState(_States.Fall));
+            return;
         }
     }
 

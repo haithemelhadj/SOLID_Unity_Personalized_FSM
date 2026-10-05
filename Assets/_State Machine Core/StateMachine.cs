@@ -1,106 +1,34 @@
 using UnityEngine;
 
-//namespace SM
-//{
-public class StateMachine : MonoBehaviour
+// Concrete player adapter keeps the original component and serialized field names.
+public class StateMachine : StateMachineBase<Context, State, StateFactory>
 {
-    //[HideInInspector] public string customName;
-    [Header("-----DEBUGGING-----")]
-    public string currentStateName;
-
-    #region  Current Movement Values
-    //[Header("Current Movement")]
-    //[HideInInspector] public float c_HSpeed;
-    //[HideInInspector] public float c_MaxHSpeed;
-    //[HideInInspector] public float c_Acceleration;
-    //[HideInInspector] public float c_Deceleration;
-    #endregion
-
-
-
-    
-
-    #region Refrences
-
-    [Header("-----STATE MACHINE-----")]
     public Context currentContext;
-    [SerializeField] public StateFactory factory;
-    [HideInInspector] public _States currentEnumState;
-
-
     public StatesList playerStates;
     public _States initalState;
+    [HideInInspector] public _States currentEnumState;
     [HideInInspector] public State mainState;
-    [HideInInspector] public State currentState;
     [HideInInspector] public State currentParallelState;
-    #endregion
 
-    private void Initialize()
+    protected override void ContextAwake()
+    {
+        if (currentContext == null) currentContext = GetComponent<Context>();
+        if (currentContext == null) throw new System.InvalidOperationException("StateMachine requires a Context.");
+        currentContext.ContextStart();
+    }
+
+    protected override void Initialize()
     {
         factory = new StateFactory(this, playerStates);
         currentState = factory.GetState(initalState);
         currentState.OnEnter();
     }
-    private void Awake()
-    {
-        //Initialize States
-        Initialize();
-    }
 
+    protected override void ContextUpdate() => currentContext.ContextUpdate();
 
-    private void Start()
+    private void OnDestroy()
     {
-        currentContext.ContextStart();
+        currentState?.OnExit();
+        factory?.Dispose();
     }
-
-    void Update()
-    {
-        currentContext.ContextUpdate();
-        if (currentState != null)
-            currentState.OnUpdate();
-    }
-
-    private void FixedUpdate()
-    {
-        if (currentState != null)
-            currentState.OnFixedUpdate();
-    }
-
-    private void LateUpdate()
-    {
-        if (currentState != null)
-            currentState.OnLateUpdate();
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        currentState?.OnTriggerEnter2D(other);
-    }
-
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        currentState?.OnTriggerStay2D(other);
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        currentState?.OnTriggerExit2D(other);
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        currentState?.OnCollisionEnter2D(collision);
-    }
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        currentState?.OnCollisionStay2D(collision);
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        currentState?.OnCollisionExit2D(collision);
-    }
-
 }
-
-//}

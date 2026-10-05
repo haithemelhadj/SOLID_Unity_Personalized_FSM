@@ -6,6 +6,7 @@ public class MeleBaseState : ActionState
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
     }
 
     public override void OnEnter()

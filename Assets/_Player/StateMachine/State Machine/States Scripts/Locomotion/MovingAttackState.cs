@@ -6,13 +6,16 @@ public class MovingAttackState : LocomotionState
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
         if (Time.time - enterTime >= duration)
         {
             SwitchState(factory.GetState(_States.Grounded));
+            return;
         }
         if (!currentContext.isGrounded && currentContext.Rb.velocity.y < 0.1f)
         {
             SwitchState(factory.GetState(_States.Fall));
+            return;
         }
     }
 

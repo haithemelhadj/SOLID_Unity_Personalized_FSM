@@ -12,9 +12,11 @@ public class JumpState : LocomotionState
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
         if (currentContext.jumpInputUp || currentContext.jumpTimeCounter < 0 || currentContext.isHeadBumping)
         {
             SwitchState(factory.GetState(_States.Fall));
+            return;
         }
     }
 

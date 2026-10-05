@@ -7,13 +7,16 @@ public class DashState : ActionState
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
         if (currentContext.isHuggingWall)
         {
             SwitchState(factory.GetState(_States.WallSlide));
+            return;
         }
         else if (!currentContext.isDashing)
         {
             SwitchState(factory.GetState(_States.Fall));
+            return;
         }
     }
 

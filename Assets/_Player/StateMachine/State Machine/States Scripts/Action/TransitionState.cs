@@ -10,9 +10,11 @@ public class TransitionState : State
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
         if (Time.time - enterTime >= duration)
         {
             SwitchState(factory.GetState(transitionToState));
+            return;
         }
     }
 

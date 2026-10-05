@@ -13,9 +13,11 @@ public class DefendState : LocomotionState
     public override void CheckSwitchState()
     {
         base.CheckSwitchState();
+        if (!IsCurrentState) return;
         if (!currentContext.defendInput)
         {
             SwitchState(factory.GetState(_States.Grounded));
+            return;
         }
     }
 
