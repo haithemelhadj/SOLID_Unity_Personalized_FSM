@@ -1,3 +1,21 @@
+# Customizable Unity Player State Machine
+
+I started this system solo because the state-machine and behavior-tree approaches I tried did not fit my player transitions. The goal was a setup I could carry into a new project, with ready-made states and values I could tune in the Inspector.
+
+[Portfolio case study](https://haithem-portfolio.vercel.app/projects/unity-state-machine/)
+
+## Project evolution
+
+- Built the original player-state architecture and configurable state assets.
+- Continued development in Parrying_Game, separating a generic core from player-specific behavior and addressing shared runtime state and transition ordering.
+- Brought those improvements back to this standalone project. Later AI-assisted maintenance added lifecycle fixes and regression checks.
+
+States share behavior through inheritance. This implementation runs one active state at a time; it is not a visual behavior-tree editor or a concurrent nested-state framework.
+
+The illustrated guide below covers configuration, lifecycle, architecture and setup.
+
+---
+
 # Unity All Purpose State Machine (SOLID Friendly)
 
 A flexible, extensible, SOLID-oriented state machine system for Unity.
